@@ -1,8 +1,13 @@
-// ** React Imports
+// ** Next
 import { useRouter } from 'next/router'
+
+// ** React Imports
 import { ReactNode, ReactElement, useEffect } from 'react'
+
+// ** Config
 import { ACCESS_TOKEN, USER_DATA } from 'src/configs/auth'
-import { clearLocalUserData } from 'src/helpers/storage'
+
+// ** Hooks
 import { useAuth } from 'src/hooks/useAuth'
 
 interface GuestGuardProps {
@@ -12,10 +17,15 @@ interface GuestGuardProps {
 
 const GuestGuard = (props: GuestGuardProps) => {
   const { children, fallback } = props
+
+  // ** router
   const router = useRouter()
-  const auth = useAuth()
+
+  // ** auth
+  const authContext = useAuth()
+  console.log('authContext', { authContext })
   useEffect(() => {
-    if (router.isReady) {
+    if (!router.isReady) {
       return
     }
     if (window.localStorage.getItem(ACCESS_TOKEN) && window.localStorage.getItem(USER_DATA)) {
@@ -23,9 +33,10 @@ const GuestGuard = (props: GuestGuardProps) => {
     }
   }, [router.route])
 
-  if (auth.loading) {
+  if (authContext.loading) {
     return fallback
   }
+
   return <>{children}</>
 }
 
