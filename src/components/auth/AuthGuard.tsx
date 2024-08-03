@@ -1,24 +1,40 @@
-// ** React Imports
+// ** Next Imports
 import { useRouter } from 'next/router'
-import { ReactNode, ReactElement, useEffect } from 'react'
-import { ACCESS_TOKEN, USER_DATA } from 'src/configs/auth'
-import { clearLocalUserData } from 'src/helpers/storage'
-import { useAuth } from 'src/hooks/useAuth'
 
+// ** React Imports
+import { ReactNode, ReactElement, useEffect } from 'react'
+
+// ** config
+import { ACCESS_TOKEN, USER_DATA } from 'src/configs/auth'
+
+// ** helpers
+import { clearLocalUserData } from 'src/helpers/storage'
+
+// ** Hooks
+import { useAuth } from 'src/hooks/useAuth'
 interface AuthGuardProps {
   children: ReactNode
   fallback: ReactElement | null
 }
 
 const AuthGuard = (props: AuthGuardProps) => {
+  // ** Props
   const { children, fallback } = props
-  const auth = useAuth()
+  // ** auth
+  const authContext = useAuth()
+
+  // ** router
   const router = useRouter()
+
   useEffect(() => {
-    if (router.isReady) {
+    if (!router.isReady) {
       return
     }
-    if (auth.user === null && !window.localStorage.getItem(ACCESS_TOKEN) && !window.localStorage.getItem(USER_DATA)) {
+    if (
+      authContext.user === null &&
+      !window.localStorage.getItem(ACCESS_TOKEN) &&
+      !window.localStorage.getItem(USER_DATA)
+    ) {
       if (router.asPath !== '/') {
         router.replace({
           pathname: '/login',
@@ -27,13 +43,15 @@ const AuthGuard = (props: AuthGuardProps) => {
       } else {
         router.replace('/login')
       }
-      auth.setUser(null)
+      authContext.setUser(null)
       clearLocalUserData()
     }
   }, [router.route])
-  if (auth.loading || auth.user === null) {
+
+  if (authContext.loading || authContext.user === null) {
     return fallback
   }
+
   return <>{children}</>
 }
 

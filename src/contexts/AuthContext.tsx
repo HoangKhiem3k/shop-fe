@@ -12,9 +12,13 @@ import authConfig from 'src/configs/auth'
 
 // ** Types
 import { AuthValuesType, LoginParams, ErrCallbackType, UserDataType } from './types'
-import { loginAuth, logoutAuth } from 'src/services/auth'
+
+// ** services
+import { loginAuth } from 'src/services/auth'
 import { CONFIG_API } from 'src/configs/api'
 import { clearLocalUserData, setLocalUserData } from 'src/helpers/storage'
+import { logoutAuth } from '../services/auth'
+import instanceAxios from 'src/helpers/axios'
 
 // ** Defaults
 const defaultProvider: AuthValuesType = {
@@ -43,14 +47,11 @@ const AuthProvider = ({ children }: Props) => {
   useEffect(() => {
     const initAuth = async (): Promise<void> => {
       const storedToken = window.localStorage.getItem(authConfig.storageTokenKeyName)
+
       if (storedToken) {
         setLoading(true)
-        await axios
-          .get(CONFIG_API.AUTH.AUTH_ME, {
-            headers: {
-              Authorization: `Bearer ${storedToken}`
-            }
-          })
+        await instanceAxios
+          .get(CONFIG_API.AUTH.AUTH_ME)
           .then(async response => {
             setLoading(false)
             setUser({ ...response.data.data })
@@ -69,7 +70,6 @@ const AuthProvider = ({ children }: Props) => {
     }
 
     initAuth()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const handleLogin = (params: LoginParams, errorCallback?: ErrCallbackType) => {
@@ -85,6 +85,7 @@ const AuthProvider = ({ children }: Props) => {
         const returnUrl = router.query.returnUrl
         setUser({ ...response.data.user })
         const redirectURL = returnUrl && returnUrl !== '/' ? returnUrl : '/'
+
         router.replace(redirectURL as string)
       })
 
