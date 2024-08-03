@@ -8,10 +8,9 @@ import RegisterPage from 'src/views/pages/register'
 
 type TProps = {}
 
-const Register: NextPage<TProps> = () => {
+const Index: NextPage<TProps> = () => {
   return <RegisterPage />
 }
-export default Register
+export default Index
 
-Register.getLayout = (page: ReactNode) => <BlankLayout>{page}</BlankLayout>
-Register.guestGuard = true
+Index.getLayout = (page: ReactNode) => <BlankLayout>{page}</BlankLayout>
