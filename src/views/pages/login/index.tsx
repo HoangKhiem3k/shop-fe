@@ -2,10 +2,8 @@
 import { NextPage } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
-
 // ** React
 import { useState } from 'react'
-
 // ** Mui
 import {
   Box,
@@ -18,25 +16,24 @@ import {
   Typography,
   useTheme
 } from '@mui/material'
-
 // ** Components
 import CustomTextField from 'src/components/text-field'
 import Icon from 'src/components/Icon'
-
-// ** form
+// ** Form
 import { Controller, useForm } from 'react-hook-form'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
-
 // ** Config
 import { EMAIL_REG, PASSWORD_REG } from 'src/configs/regex'
-
 // ** Images
 import LoginDark from '/public/images/login-dark.png'
 import LoginLight from '/public/images/login-light.png'
-
 // ** Hooks
 import { useAuth } from 'src/hooks/useAuth'
+// ** Translation
+import toast from 'react-hot-toast'
+// ** Others
+import { useTranslation } from 'react-i18next'
 
 type TProps = {}
 
@@ -49,13 +46,12 @@ const LoginPage: NextPage<TProps> = () => {
   // State
   const [showPassword, setShowPassword] = useState(false)
   const [isRemember, setIsRemember] = useState(true)
-
+  // ** Translate
+  const { t } = useTranslation()
   // Context
   const { login } = useAuth()
-
   // Theme
   const theme = useTheme()
-
   const schema = yup.object().shape({
     email: yup.string().required('The field is required').matches(EMAIL_REG, 'The field is must email type'),
     password: yup
@@ -63,27 +59,26 @@ const LoginPage: NextPage<TProps> = () => {
       .required('The field is required')
       .matches(PASSWORD_REG, 'The password is contain charactor, special character, number')
   })
-
   const defaultValues: TDefaultValue = {
     email: 'admin_khiem@gmail.com',
     password: '123456789Khiem@'
   }
-
   const {
     handleSubmit,
     control,
-    formState: { errors }
+    formState: { errors },
+    setError
   } = useForm({
     defaultValues,
     mode: 'onBlur',
     resolver: yupResolver(schema)
   })
-
   const onSubmit = (data: { email: string; password: string }) => {
     if (!Object.keys(errors)?.length) {
-      login({ ...data, rememberMe: isRemember })
+      login({ ...data, rememberMe: isRemember }, err => {
+        if (err?.response?.data?.typeError === 'INVALID') toast.error(t('The_email_or_password_wrong'))
+      })
     }
-    console.log('data', { data, errors })
   }
 
   return (
