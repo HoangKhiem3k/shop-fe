@@ -1,6 +1,13 @@
 import axios from 'axios'
 import { BASE_URL, CONFIG_API } from 'src/configs/api'
-import { clearLocalUserData, getLocalUserData } from '../storage'
+import {
+  clearLocalUserData,
+  clearTemporaryToken,
+  getLocalUserData,
+  getTemporaryToken,
+  setLocalUserData,
+  setTemporaryToken
+} from '../storage'
 import { jwtDecode } from 'jwt-decode'
 import { FC } from 'react'
 import { NextRouter, useRouter } from 'next/router'
@@ -22,24 +29,32 @@ const handleRedirectLogin = (router: NextRouter, setUser: (data: UserDataType | 
   }
   setUser(null)
   clearLocalUserData()
+  clearTemporaryToken()
 }
 
 const instanceAxios = axios.create({ baseURL: BASE_URL })
 
 const AxiosInterceptor: FC<TAxiosInterceptor> = ({ children }) => {
   const router = useRouter()
-  const { setUser } = useAuth()
+  const { setUser, user } = useAuth()
 
   instanceAxios.interceptors.request.use(async config => {
     const { accessToken, refreshToken } = getLocalUserData()
-    if (accessToken) {
-      const decodeAccessToken: any = jwtDecode(accessToken)
-      if (decodeAccessToken?.exp > Date.now() / 1000) {
-        config.headers['Authorization'] = `Bearer ${accessToken}`
+    const { temporaryToken } = getTemporaryToken()
+
+    if (accessToken || temporaryToken) {
+      let decodedAccessToken: any = {}
+      if (accessToken) {
+        decodedAccessToken = jwtDecode(accessToken)
+      } else if (temporaryToken) {
+        decodedAccessToken = jwtDecode(temporaryToken)
+      }
+      if (decodedAccessToken?.exp > Date.now() / 1000) {
+        config.headers['Authorization'] = `Bearer ${accessToken ? accessToken : temporaryToken}`
       } else {
         if (refreshToken) {
-          const deoodeRefreshToken: any = jwtDecode(refreshToken)
-          if (deoodeRefreshToken?.exp > Date.now() / 1000) {
+          const deoodedRefreshToken: any = jwtDecode(refreshToken)
+          if (deoodedRefreshToken?.exp > Date.now() / 1000) {
             await axios
               .post(
                 `${CONFIG_API.AUTH.INDEX}/refresh-token`,
@@ -54,6 +69,9 @@ const AxiosInterceptor: FC<TAxiosInterceptor> = ({ children }) => {
                 const newAccessToken = res?.data?.data?.access_token
                 if (newAccessToken) {
                   config.headers['Authorization'] = `Bearer ${newAccessToken}`
+                  if (accessToken) {
+                    setLocalUserData(JSON.stringify(user), newAccessToken, refreshToken)
+                  }
                 } else {
                   handleRedirectLogin(router, setUser)
                 }
