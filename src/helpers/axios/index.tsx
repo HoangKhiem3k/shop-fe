@@ -28,10 +28,10 @@ const instanceAxios = axios.create({ baseURL: BASE_URL })
 
 const AxiosInterceptor: FC<TAxiosInterceptor> = ({ children }) => {
   const router = useRouter()
-  const { accessToken, refreshToken } = getLocalUserData()
   const { setUser } = useAuth()
 
   instanceAxios.interceptors.request.use(async config => {
+    const { accessToken, refreshToken } = getLocalUserData()
     if (accessToken) {
       const decodeAccessToken: any = jwtDecode(accessToken)
       if (decodeAccessToken?.exp > Date.now() / 1000) {
@@ -71,6 +71,7 @@ const AxiosInterceptor: FC<TAxiosInterceptor> = ({ children }) => {
     } else {
       handleRedirectLogin(router, setUser)
     }
+
     return config
   })
 

@@ -233,7 +233,7 @@ const MyProfilePage: NextPage<TProps> = () => {
                         onChange={onChange}
                         onBlur={onBlur}
                         value={value}
-                        placeholder={t('enter_your_email')}
+                        placeholder={t('Enter_your_email')}
                         error={Boolean(errors?.email)}
                         helperText={errors?.email?.message}
                       />
@@ -257,7 +257,7 @@ const MyProfilePage: NextPage<TProps> = () => {
                         onChange={onChange}
                         onBlur={onBlur}
                         value={value}
-                        placeholder={t('enter_your_role')}
+                        placeholder={t('Enter_your_role')}
                         error={Boolean(errors?.role)}
                         helperText={errors?.role?.message}
                       />
@@ -292,7 +292,7 @@ const MyProfilePage: NextPage<TProps> = () => {
                         onChange={onChange}
                         onBlur={onBlur}
                         value={value}
-                        placeholder={t('enter_your_full_name')}
+                        placeholder={t('Enter_your_full_name')}
                         error={Boolean(errors?.fullName)}
                         helperText={errors?.fullName?.message}
                       />
@@ -312,7 +312,7 @@ const MyProfilePage: NextPage<TProps> = () => {
                         onChange={onChange}
                         onBlur={onBlur}
                         value={value}
-                        placeholder={t('enter_your_address')}
+                        placeholder={t('Enter_your_address')}
                       />
                     )}
                   />
@@ -329,7 +329,7 @@ const MyProfilePage: NextPage<TProps> = () => {
                         onChange={onChange}
                         onBlur={onBlur}
                         value={value}
-                        placeholder={t('enter_your_city')}
+                        placeholder={t('Enter_your_city')}
                       />
                     )}
                   />
@@ -354,7 +354,7 @@ const MyProfilePage: NextPage<TProps> = () => {
                         }}
                         onBlur={onBlur}
                         value={value}
-                        placeholder={t('enter_your_phone')}
+                        placeholder={t('Enter_your_phone')}
                         error={Boolean(errors?.phoneNumber)}
                         helperText={errors?.phoneNumber?.message}
                       />

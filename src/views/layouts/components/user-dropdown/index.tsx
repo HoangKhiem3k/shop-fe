@@ -58,25 +58,22 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
 const UserDropdown = (props: TProps) => {
   // ** Translation
   const { t, i18n } = useTranslation()
-
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
-
   const { user, logout } = useAuth()
-
   const open = Boolean(anchorEl)
-
   const router = useRouter()
-
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget)
   }
-
   const handleClose = () => {
     setAnchorEl(null)
   }
-
   const handleNavigateMyProfile = () => {
     router.push('/my-profile')
+    handleClose()
+  }
+  const handleNavigateChangePassword = () => {
+    router.push(ROUTE_CONFIG.CHANGE_PASSWORD)
     handleClose()
   }
 
@@ -181,13 +178,19 @@ const UserDropdown = (props: TProps) => {
           <Avatar>
             <Icon icon='ph:user-thin' />
           </Avatar>{' '}
-          {t('my_profile')}
+          {t('My_profile')}
+        </MenuItem>
+        <MenuItem onClick={handleNavigateChangePassword}>
+          <Avatar sx={{ backgroundColor: 'transparent' }}>
+            <Icon icon='arcticons:password' />
+          </Avatar>
+          {t('Change_password')}
         </MenuItem>
         <MenuItem onClick={logout}>
           <Avatar sx={{ backgroundColor: 'transparent' }}>
             <Icon icon='material-symbols-light:logout' />
           </Avatar>
-          Logout
+          {t('Logout')}
         </MenuItem>
       </Menu>
     </React.Fragment>
