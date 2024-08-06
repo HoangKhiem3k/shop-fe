@@ -1,44 +1,32 @@
 // ** Next
 import { NextPage } from 'next'
-
 // ** React
 import { useEffect, useState } from 'react'
-
 // ** Mui
 import { Avatar, Box, Button, Grid, IconButton, useTheme } from '@mui/material'
-
 // ** Components
 import CustomTextField from 'src/components/text-field'
 import Icon from 'src/components/Icon'
 import WrapperFileUpload from 'src/components/wrapper-file-upload'
-
-// ** form
+import Spinner from 'src/components/spinner'
+// ** Form
 import { Controller, useForm } from 'react-hook-form'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
-
 // ** Config
 import { EMAIL_REG } from 'src/configs/regex'
-
 // ** Translate
 import { t } from 'i18next'
 import { useTranslation } from 'react-i18next'
-
-// ** services
+// ** Services
 import { getAuthMe } from 'src/services/auth'
-
 // ** Utils
 import { convertBase64, separationFullName, toFullName } from 'src/utils'
-
 // ** Redux
 import { updateAuthMeAsync } from 'src/stores/apps/auth/actions'
 import { resetInitialState } from 'src/stores/apps/auth'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from 'src/stores'
-
-// ** component
-import FallbackSpinner from 'src/components/fall-back'
-
 // ** Other
 import toast from 'react-hot-toast'
 
@@ -164,7 +152,7 @@ const MyProfilePage: NextPage<TProps> = () => {
 
   return (
     <>
-      {loading || (isLoading && <FallbackSpinner />)}
+      {loading || (isLoading && <Spinner />)}
       <form onSubmit={handleSubmit(onSubmit)} autoComplete='off' noValidate>
         <Grid container>
           <Grid

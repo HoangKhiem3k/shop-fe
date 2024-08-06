@@ -1,11 +1,9 @@
 // ** React
 import React from 'react'
-
 // ** Next
 import Image from 'next/image'
 import { useRouter } from 'next/router'
-
-// ** Mui Imports
+// ** Mui
 import Box from '@mui/material/Box'
 import Avatar from '@mui/material/Avatar'
 import Menu from '@mui/material/Menu'
@@ -15,19 +13,14 @@ import Divider from '@mui/material/Divider'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 import { Badge, Typography, styled } from '@mui/material'
-
 // ** Components
-import IconifyIcon from 'src/components/Icon'
-
+import Icon from 'src/components/Icon'
 // ** Hooks
 import { useAuth } from 'src/hooks/useAuth'
-
 // ** Translate
 import { useTranslation } from 'react-i18next'
-
-// ** config
+// ** Config
 import { ROUTE_CONFIG } from 'src/configs/route'
-
 // ** Utils
 import { toFullName } from 'src/utils'
 
@@ -114,7 +107,7 @@ const UserDropdown = (props: TProps) => {
                     }}
                   />
                 ) : (
-                  <IconifyIcon icon='ph:user-thin' />
+                  <Icon icon='ph:user-thin' />
                 )}
               </Avatar>
             </StyledBadge>
@@ -172,7 +165,7 @@ const UserDropdown = (props: TProps) => {
                   }}
                 />
               ) : (
-                <IconifyIcon icon='ph:user-thin' />
+                <Icon icon='ph:user-thin' />
               )}
             </Avatar>
           </StyledBadge>
@@ -185,10 +178,15 @@ const UserDropdown = (props: TProps) => {
         </Box>
         <Divider />
         <MenuItem onClick={handleNavigateMyProfile}>
-          <Avatar /> {t('My_profile')}
+          <Avatar>
+            <Icon icon='ph:user-thin' />
+          </Avatar>{' '}
+          {t('my_profile')}
         </MenuItem>
         <MenuItem onClick={logout}>
-          <ListItemIcon>{/* <Logout fontSize='small' /> */}</ListItemIcon>
+          <Avatar sx={{ backgroundColor: 'transparent' }}>
+            <Icon icon='material-symbols-light:logout' />
+          </Avatar>
           Logout
         </MenuItem>
       </Menu>
