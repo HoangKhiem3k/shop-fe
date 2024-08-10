@@ -21,14 +21,16 @@ import RegisterDark from '/public/images/register-dark.png'
 import RegisterLight from '/public/images/register-light.png'
 // ** Redux
 import { useDispatch, useSelector } from 'react-redux'
-import { registerAuthAsync } from 'src/stores/apps/auth/actions'
 import { AppDispatch, RootState } from 'src/stores'
-import { resetInitialState } from 'src/stores/apps/auth'
+import { registerAuthAsync } from 'src/stores/auth/actions'
+import { resetInitialState } from 'src/stores/auth'
 // ** Toast
 import toast from 'react-hot-toast'
 // ** Routers
 import { useRouter } from 'next/router'
 import { ROUTE_CONFIG } from 'src/configs/route'
+// ** Translate
+import { useTranslation } from 'react-i18next'
 
 type TProps = {}
 
@@ -42,26 +44,25 @@ const RegisterPage: NextPage<TProps> = () => {
   // State
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
-
-  // ** theme
+  // Translate
+  const { t } = useTranslation()
+  // Theme
   const theme = useTheme()
-
-  // ** router
+  // Router
   const router = useRouter()
-
-  /// ** redux
+  /// Redux
   const dispatch: AppDispatch = useDispatch()
   const { isLoading, isError, isSuccess, message } = useSelector((state: RootState) => state.auth)
 
   const schema = yup.object().shape({
-    email: yup.string().required('The field is required').matches(EMAIL_REG, 'The field is must email type'),
+    email: yup.string().required(t('Required_field')).matches(EMAIL_REG, 'The field is must email type'),
     password: yup
       .string()
-      .required('The field is required')
+      .required(t('Required_field'))
       .matches(PASSWORD_REG, 'The password is contain charactor, special character, number'),
     confirmPassword: yup
       .string()
-      .required('The field is required')
+      .required(t('Required_field'))
       .matches(PASSWORD_REG, 'The password is contain charactor, special character, number')
       .oneOf([yup.ref('password'), ''], 'The confirm is must match with password')
   })

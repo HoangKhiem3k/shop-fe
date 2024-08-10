@@ -1,11 +1,20 @@
-import { Box, InputLabel, InputLabelProps, MenuItem, MenuItemProps, Select, SelectProps, styled } from '@mui/material'
+import {
+  Box,
+  InputLabel,
+  InputLabelProps,
+  MenuItem,
+  MenuItemProps,
+  Select,
+  BaseSelectProps,
+  styled
+} from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
-interface TCustomSelect extends SelectProps {
+interface TCustomSelect extends BaseSelectProps {
   options: { label: string; value: string }[]
 }
 
-const StyledSelect = styled(Select)<SelectProps>(({ theme }) => ({
+const StyledSelect = styled(Select)<BaseSelectProps>(({ theme }) => ({
   '& .MuiSelect-select.MuiSelect-outlined.MuiInputBase-input': {
     padding: '4px 8px 8px 10px !important',
     height: '38px',
