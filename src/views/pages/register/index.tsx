@@ -2,35 +2,41 @@
 import { NextPage } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
+
 // ** React
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+
 // ** Mui
 import { Box, Button, CssBaseline, IconButton, InputAdornment, Typography, useTheme } from '@mui/material'
+
 // ** Components
 import CustomTextField from 'src/components/text-field'
 import Icon from 'src/components/Icon'
 import FallbackSpinner from 'src/components/fall-back'
-// ** Form
+
+// ** form
 import { Controller, useForm } from 'react-hook-form'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
+
 // ** Config
 import { EMAIL_REG, PASSWORD_REG } from 'src/configs/regex'
+
 // ** Images
 import RegisterDark from '/public/images/register-dark.png'
 import RegisterLight from '/public/images/register-light.png'
+
 // ** Redux
 import { useDispatch, useSelector } from 'react-redux'
-import { AppDispatch, RootState } from 'src/stores'
 import { registerAuthAsync } from 'src/stores/auth/actions'
+import { AppDispatch, RootState } from 'src/stores'
 import { resetInitialState } from 'src/stores/auth'
-// ** Toast
-import toast from 'react-hot-toast'
-// ** Routers
-import { useRouter } from 'next/router'
+
+// ** Other
 import { ROUTE_CONFIG } from 'src/configs/route'
-// ** Translate
-import { useTranslation } from 'react-i18next'
+import toast from 'react-hot-toast'
 
 type TProps = {}
 
@@ -44,27 +50,28 @@ const RegisterPage: NextPage<TProps> = () => {
   // State
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
-  // Translate
-  const { t } = useTranslation()
-  // Theme
-  const theme = useTheme()
-  // Router
+
+  // ** router
   const router = useRouter()
-  /// Redux
+
+  /// ** redux
   const dispatch: AppDispatch = useDispatch()
   const { isLoading, isError, isSuccess, message } = useSelector((state: RootState) => state.auth)
 
+  // ** theme
+  const theme = useTheme()
+
+  // ** Translate
+  const { t } = useTranslation()
+
   const schema = yup.object().shape({
-    email: yup.string().required(t('Required_field')).matches(EMAIL_REG, 'The field is must email type'),
-    password: yup
-      .string()
-      .required(t('Required_field'))
-      .matches(PASSWORD_REG, 'The password is contain charactor, special character, number'),
+    email: yup.string().required(t('Required_field')).matches(EMAIL_REG, t('Rules_email')),
+    password: yup.string().required(t('Required_field')).matches(PASSWORD_REG, t('Rules_password')),
     confirmPassword: yup
       .string()
       .required(t('Required_field'))
-      .matches(PASSWORD_REG, 'The password is contain charactor, special character, number')
-      .oneOf([yup.ref('password'), ''], 'The confirm is must match with password')
+      .matches(PASSWORD_REG, t('Rules_password'))
+      .oneOf([yup.ref('password'), ''], t('Rules_confirm_password'))
   })
 
   const defaultValues: TDefaultValue = {
@@ -82,11 +89,13 @@ const RegisterPage: NextPage<TProps> = () => {
     mode: 'onBlur',
     resolver: yupResolver(schema)
   })
+
   const onSubmit = (data: { email: string; password: string }) => {
     if (!Object.keys(errors)?.length) {
       dispatch(registerAuthAsync({ email: data.email, password: data.password }))
     }
   }
+
   useEffect(() => {
     if (message) {
       if (isError) {
@@ -109,7 +118,7 @@ const RegisterPage: NextPage<TProps> = () => {
           backgroundColor: theme.palette.background.paper,
           display: 'flex',
           alignItems: 'center',
-          minWidth: '50vw'
+          padding: '40px'
         }}
       >
         <Box
@@ -146,7 +155,7 @@ const RegisterPage: NextPage<TProps> = () => {
             }}
           >
             <Typography component='h1' variant='h5'>
-              Register
+              {t('Register')}
             </Typography>
             <form onSubmit={handleSubmit(onSubmit)} autoComplete='off' noValidate>
               <Box sx={{ mt: 2, width: '300px' }}>
@@ -160,11 +169,11 @@ const RegisterPage: NextPage<TProps> = () => {
                       required
                       autoFocus
                       fullWidth
-                      label='Email'
+                      label={t('Email')}
                       onChange={onChange}
                       onBlur={onBlur}
                       value={value}
-                      placeholder='Input email'
+                      placeholder={t('Enter_email')}
                       error={Boolean(errors?.email)}
                       helperText={errors?.email?.message}
                     />
@@ -184,11 +193,11 @@ const RegisterPage: NextPage<TProps> = () => {
                       required
                       fullWidth
                       autoFocus
-                      label='Password'
+                      label={t('Password')}
                       onChange={onChange}
                       onBlur={onBlur}
                       value={value}
-                      placeholder='Input password'
+                      placeholder={t('Enter_password')}
                       error={Boolean(errors?.password)}
                       helperText={errors?.password?.message}
                       type={showPassword ? 'text' : 'password'}
@@ -222,11 +231,11 @@ const RegisterPage: NextPage<TProps> = () => {
                       required
                       fullWidth
                       autoFocus
-                      label='Confirm password'
+                      label={t('Confirm_password')}
                       onChange={onChange}
                       onBlur={onBlur}
                       value={value}
-                      placeholder='Enter confirm password'
+                      placeholder={t('Enter_confirm_password')}
                       error={Boolean(errors?.confirmPassword)}
                       helperText={errors?.confirmPassword?.message}
                       type={showConfirmPassword ? 'text' : 'password'}
@@ -250,20 +259,20 @@ const RegisterPage: NextPage<TProps> = () => {
               </Box>
 
               <Button type='submit' fullWidth variant='contained' sx={{ mt: 3, mb: 2 }}>
-                Register
+                {t('Register')}
               </Button>
               <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px' }}>
-                <Typography>{'Do you have already account?'}</Typography>
+                <Typography>{t('You_have_account')}</Typography>
                 <Link
                   href='/login'
                   style={{
                     color: theme.palette.primary.main
                   }}
                 >
-                  {'Login'}
+                  {t('Login')}
                 </Link>
               </Box>
-              <Typography sx={{ textAlign: 'center', mt: 2, mb: 2 }}>Or</Typography>
+              <Typography sx={{ textAlign: 'center', mt: 2, mb: 2 }}>{t('Or')}</Typography>
               <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
                 <IconButton sx={{ color: '#497ce2' }}>
                   <svg
