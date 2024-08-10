@@ -2,8 +2,10 @@
 import { NextPage } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
+
 // ** React
-import { useState } from 'react'
+import { useContext, useState } from 'react'
+
 // ** Mui
 import {
   Box,
@@ -16,23 +18,26 @@ import {
   Typography,
   useTheme
 } from '@mui/material'
+
 // ** Components
 import CustomTextField from 'src/components/text-field'
 import Icon from 'src/components/Icon'
-// ** Form
+
+// ** form
 import { Controller, useForm } from 'react-hook-form'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
+
 // ** Config
 import { EMAIL_REG, PASSWORD_REG } from 'src/configs/regex'
+
 // ** Images
 import LoginDark from '/public/images/login-dark.png'
 import LoginLight from '/public/images/login-light.png'
+
 // ** Hooks
 import { useAuth } from 'src/hooks/useAuth'
-// ** Translation
 import toast from 'react-hot-toast'
-// ** Others
 import { useTranslation } from 'react-i18next'
 
 type TProps = {}
@@ -46,23 +51,26 @@ const LoginPage: NextPage<TProps> = () => {
   // State
   const [showPassword, setShowPassword] = useState(false)
   const [isRemember, setIsRemember] = useState(true)
+
   // ** Translate
   const { t } = useTranslation()
-  // Context
+
+  // ** context
   const { login } = useAuth()
-  // Theme
+
+  // ** theme
   const theme = useTheme()
+
   const schema = yup.object().shape({
-    email: yup.string().required(t('Required_field')).matches(EMAIL_REG, 'The field is must email type'),
-    password: yup
-      .string()
-      .required(t('Required_field'))
-      .matches(PASSWORD_REG, 'The password is contain charactor, special character, number')
+    email: yup.string().required(t('Required_field')).matches(EMAIL_REG, t('Rules_email')),
+    password: yup.string().required(t('Required_field')).matches(PASSWORD_REG, t('Rules_password'))
   })
+
   const defaultValues: TDefaultValue = {
     email: 'admin_khiem@gmail.com',
-    password: '123456789Khiem@'
+    password: '1234567890Khiem@'
   }
+
   const {
     handleSubmit,
     control,
@@ -73,6 +81,7 @@ const LoginPage: NextPage<TProps> = () => {
     mode: 'onBlur',
     resolver: yupResolver(schema)
   })
+
   const onSubmit = (data: { email: string; password: string }) => {
     if (!Object.keys(errors)?.length) {
       login({ ...data, rememberMe: isRemember }, err => {
@@ -126,7 +135,7 @@ const LoginPage: NextPage<TProps> = () => {
           }}
         >
           <Typography component='h1' variant='h5'>
-            Sign in
+            {t('Login')}
           </Typography>
           <form onSubmit={handleSubmit(onSubmit)} autoComplete='off' noValidate>
             <Box sx={{ mt: 2, width: '300px' }}>
@@ -140,11 +149,11 @@ const LoginPage: NextPage<TProps> = () => {
                     required
                     autoFocus
                     fullWidth
-                    label='Email'
+                    label={t('Email')}
                     onChange={onChange}
                     onBlur={onBlur}
                     value={value}
-                    placeholder='Input email'
+                    placeholder={t('Enter_email')}
                     error={Boolean(errors?.email)}
                     helperText={errors?.email?.message}
                   />
@@ -164,11 +173,11 @@ const LoginPage: NextPage<TProps> = () => {
                     required
                     fullWidth
                     autoFocus
-                    label='Password'
+                    label={t('Password')}
                     onChange={onChange}
                     onBlur={onBlur}
                     value={value}
-                    placeholder='Input password'
+                    placeholder={t('Enter_password')}
                     error={Boolean(errors?.password)}
                     helperText={errors?.password?.message}
                     type={showPassword ? 'text' : 'password'}
@@ -201,25 +210,25 @@ const LoginPage: NextPage<TProps> = () => {
                     color='primary'
                   />
                 }
-                label='Remember me'
+                label={t('Remember_me')}
               />
-              <Typography variant='body2'>Forgot password?</Typography>
+              <Typography variant='body2'>{t('Forgot_password')}?</Typography>
             </Box>
             <Button type='submit' fullWidth variant='contained' sx={{ mt: 3, mb: 2 }}>
               Sign In
             </Button>
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px' }}>
-              <Typography>{"Don't have an account?"}</Typography>
+              <Typography>{t('You_have_account')}</Typography>
               <Link
                 style={{
                   color: theme.palette.primary.main
                 }}
                 href='/register'
               >
-                {'Register'}
+                {t('Register')}
               </Link>
             </Box>
-            <Typography sx={{ textAlign: 'center', mt: 2, mb: 2 }}>Or</Typography>
+            <Typography sx={{ textAlign: 'center', mt: 2, mb: 2 }}>{t('Or')}</Typography>
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
               <IconButton sx={{ color: '#497ce2' }}>
                 <svg

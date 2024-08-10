@@ -68,7 +68,7 @@ const UserDropdown = (props: TProps) => {
     setAnchorEl(null)
   }
   const handleNavigateMyProfile = () => {
-    router.push('/my-profile')
+    router.push(ROUTE_CONFIG.My_profile)
     handleClose()
   }
   const handleNavigateChangePassword = () => {
