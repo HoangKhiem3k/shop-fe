@@ -53,10 +53,10 @@ const LoginPage: NextPage<TProps> = () => {
   // Theme
   const theme = useTheme()
   const schema = yup.object().shape({
-    email: yup.string().required('The field is required').matches(EMAIL_REG, 'The field is must email type'),
+    email: yup.string().required(t('Required_field')).matches(EMAIL_REG, 'The field is must email type'),
     password: yup
       .string()
-      .required('The field is required')
+      .required(t('Required_field'))
       .matches(PASSWORD_REG, 'The password is contain charactor, special character, number')
   })
   const defaultValues: TDefaultValue = {

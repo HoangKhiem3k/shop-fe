@@ -1,12 +1,11 @@
 import axios from 'axios'
-import { BASE_URL, CONFIG_API } from 'src/configs/api'
+import { BASE_URL, API_ENDPOINT } from 'src/configs/api'
 import {
   clearLocalUserData,
   clearTemporaryToken,
   getLocalUserData,
   getTemporaryToken,
-  setLocalUserData,
-  setTemporaryToken
+  setLocalUserData
 } from '../storage'
 import { jwtDecode } from 'jwt-decode'
 import { FC } from 'react'
@@ -57,7 +56,7 @@ const AxiosInterceptor: FC<TAxiosInterceptor> = ({ children }) => {
           if (deoodedRefreshToken?.exp > Date.now() / 1000) {
             await axios
               .post(
-                `${CONFIG_API.AUTH.INDEX}/refresh-token`,
+                `${API_ENDPOINT.AUTH.INDEX}/refresh-token`,
                 {},
                 {
                   headers: {

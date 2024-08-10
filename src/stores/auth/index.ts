@@ -4,7 +4,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
 // ** Axios
 // import axios from 'axios'
-import { registerAuthAsync, updateAuthMeAsync, changePasswordMeAsync } from 'src/stores/apps/auth/actions'
+import { registerAuthAsync, updateAuthMeAsync, changePasswordMeAsync } from 'src/stores/auth/actions'
 
 // interface DataParams {
 //   q: string

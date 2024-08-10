@@ -8,7 +8,6 @@ import Box from '@mui/material/Box'
 import Avatar from '@mui/material/Avatar'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
-import ListItemIcon from '@mui/material/ListItemIcon'
 import Divider from '@mui/material/Divider'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
@@ -74,6 +73,10 @@ const UserDropdown = (props: TProps) => {
   }
   const handleNavigateChangePassword = () => {
     router.push(ROUTE_CONFIG.CHANGE_PASSWORD)
+    handleClose()
+  }
+  const handleNavigateManageSystem = () => {
+    router.push(ROUTE_CONFIG.DASHBOARD)
     handleClose()
   }
 
@@ -174,6 +177,12 @@ const UserDropdown = (props: TProps) => {
           </Box>
         </Box>
         <Divider />
+        <MenuItem onClick={handleNavigateManageSystem}>
+          <Avatar>
+            <Icon icon='arcticons:phone-manager' />
+          </Avatar>{' '}
+          {t('Manage_system')}
+        </MenuItem>
         <MenuItem onClick={handleNavigateMyProfile}>
           <Avatar>
             <Icon icon='ph:user-thin' />
