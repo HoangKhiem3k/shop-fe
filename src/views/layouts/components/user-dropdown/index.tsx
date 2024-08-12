@@ -59,6 +59,7 @@ const UserDropdown = (props: TProps) => {
   const { t, i18n } = useTranslation()
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   const { user, logout } = useAuth()
+  const permissionUser = user?.role?.permissions ?? []
   const open = Boolean(anchorEl)
   const router = useRouter()
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -177,12 +178,14 @@ const UserDropdown = (props: TProps) => {
           </Box>
         </Box>
         <Divider />
-        <MenuItem onClick={handleNavigateManageSystem}>
-          <Avatar>
-            <Icon icon='arcticons:phone-manager' />
-          </Avatar>{' '}
-          {t('Manage_system')}
-        </MenuItem>
+        {permissionUser.length > 0 && (
+          <MenuItem onClick={handleNavigateManageSystem}>
+            <Avatar>
+              <Icon icon='arcticons:phone-manager' />
+            </Avatar>{' '}
+            {t('Manage_system')}
+          </MenuItem>
+        )}
         <MenuItem onClick={handleNavigateMyProfile}>
           <Avatar>
             <Icon icon='ph:user-thin' />

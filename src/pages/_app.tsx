@@ -76,14 +76,11 @@ export default function App(props: ExtendedAppProps) {
 
   // Variables
   const getLayout = Component.getLayout ?? (page => <UserLayout>{page}</UserLayout>)
-
   const setConfig = Component.setConfig ?? undefined
-
   const authGuard = Component.authGuard ?? true
-
   const guestGuard = Component.guestGuard ?? false
-
   const aclAbilities = Component.acl ?? defaultACLObj
+  const permission = Component.permission ?? []
 
   const toastOptions = {
     success: {
@@ -120,7 +117,12 @@ export default function App(props: ExtendedAppProps) {
                 return (
                   <ThemeComponent settings={settings}>
                     <Guard authGuard={authGuard} guestGuard={guestGuard}>
-                      <AclGuard aclAbilities={aclAbilities} guestGuard={guestGuard} authGuard={authGuard}>
+                      <AclGuard
+                        permission={permission}
+                        aclAbilities={aclAbilities}
+                        guestGuard={guestGuard}
+                        authGuard={authGuard}
+                      >
                         {getLayout(<Component {...pageProps} />)}
                       </AclGuard>
                     </Guard>
