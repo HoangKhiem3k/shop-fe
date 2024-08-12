@@ -1,22 +1,13 @@
 // ** Redux
-import { Dispatch } from 'redux'
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-// ** Axios
-import axios from 'axios'
-import { changePasswordMeAsync, registerAuthAsync, updateAuthMeAsync } from 'src/stores/auth/actions'
-import { createRoleAsync, deleteRoleAsync, getAllRolesAsync, updateRoleAsync } from 'src/stores/role/actions'
+import { createSlice } from '@reduxjs/toolkit'
 
-interface DataParams {
-  q: string
-  role: string
-  status: string
-  currentPlan: string
-}
-
-interface Redux {
-  getState: any
-  dispatch: Dispatch<any>
-}
+import {
+  createRoleAsync,
+  deleteRoleAsync,
+  getAllRolesAsync,
+  serviceName,
+  updateRoleAsync
+} from 'src/stores/role/actions'
 
 const initialState = {
   isLoading: false,
@@ -37,7 +28,7 @@ const initialState = {
 }
 
 export const roleSlice = createSlice({
-  name: 'auth',
+  name: serviceName,
   initialState,
   reducers: {
     resetInitialState: state => {
