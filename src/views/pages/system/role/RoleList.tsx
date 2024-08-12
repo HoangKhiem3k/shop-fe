@@ -36,6 +36,8 @@ import { OBJECT_TYPE_ERROR_ROLE } from 'src/configs/role'
 import { PERMISSIONS } from 'src/configs/permission'
 import { getAllValueOfObject } from 'src/utils'
 import { hexToRGBA } from 'src/utils/hex-to-rgba'
+// ** Hooks
+import { usePermission } from 'src/hooks/usePermission'
 
 type TProps = {}
 
@@ -59,6 +61,8 @@ const RoleListPage: NextPage<TProps> = () => {
   })
   const [loading, setLoading] = useState(false)
   const [isDisablePermission, setIsDisabledPermission] = useState(false)
+  // ** Permission
+  const { VIEW, UPDATE, DELETE, CREATE } = usePermission('SYSTEM.ROLE', ['CREATE', 'VIEW', 'UPDATE', 'DELETE'])
 
   // ** Translate
   const { t } = useTranslation()
