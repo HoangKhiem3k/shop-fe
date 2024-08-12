@@ -4,7 +4,6 @@ export type TParamsGetUsers = {
   search?: string
   order?: string
 }
-
 export type TParamsCreateUser = {
   password: string
   firstName?: string
@@ -18,7 +17,6 @@ export type TParamsCreateUser = {
   status?: number
   city?: string
 }
-
 export type TParamsEditUser = {
   id: string
   password?: string
@@ -33,8 +31,10 @@ export type TParamsEditUser = {
   status?: number
   city?: string
 }
-
 export type TParamsDeleteUser = {
   name: string
   id: string
+}
+export type TParamsDeleteMultipleUser = {
+  userIds: string[]
 }
