@@ -63,7 +63,7 @@ const MyProfilePage: NextPage<TProps> = () => {
   const [optionRoles, setOptionRoles] = useState<{ label: string; value: string }[]>([])
   const [isDisabledRole, setIsDisabledRole] = useState(false)
 
-  // ** translate
+  // ** Hooks
   const { i18n } = useTranslation()
 
   // ** theme
@@ -104,6 +104,7 @@ const MyProfilePage: NextPage<TProps> = () => {
     mode: 'onBlur',
     resolver: yupResolver(schema)
   })
+
   // fetch api
   const fetchGetAuthMe = async () => {
     setLoading(true)
@@ -121,6 +122,7 @@ const MyProfilePage: NextPage<TProps> = () => {
             role: data?.role?._id,
             fullName: toFullName(data?.lastName, data?.middleName, data?.firstName, i18n.language)
           })
+          setAvatar(data?.avatar)
         }
       })
       .catch(() => {
@@ -306,10 +308,10 @@ const MyProfilePage: NextPage<TProps> = () => {
                             value={value}
                             placeholder={t('Enter_your_role')}
                           />
-                          {!errors?.role?.message && (
+                          {errors?.role?.message && (
                             <FormHelperText
                               sx={{
-                                color: !errors?.role
+                                color: errors?.role
                                   ? theme.palette.error.main
                                   : `rgba(${theme.palette.customColors.main}, 0.42)`
                               }}
@@ -402,10 +404,10 @@ const MyProfilePage: NextPage<TProps> = () => {
                           value={value}
                           placeholder={t('Enter_your_city')}
                         />
-                        {!errors?.city?.message && (
+                        {errors?.city?.message && (
                           <FormHelperText
                             sx={{
-                              color: !errors?.city
+                              color: errors?.city
                                 ? theme.palette.error.main
                                 : `rgba(${theme.palette.customColors.main}, 0.42)`
                             }}
